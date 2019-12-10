@@ -10,29 +10,38 @@ module.exports = appInfo => {
    * built-in config
    * @type {Egg.EggAppConfig}
    **/
-  const config = exports = {};
-
+  const config = {};
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1572846932678_4897';
-
   // add your middleware config here
   config.middleware = [];
-
   // add your user config here
-  const userConfig = {
-    // myAppName: 'egg',
-  };
-
-  exports.cluster = {
+  config.myAppName = 'monitor-service';
+  // cluster
+  config.cluster = {
     listen: {
       port: 7001,
       hostname: '0.0.0.0',
     },
   };
-
-  return {
-    ...config,
-    ...userConfig,
-    ...exports,
+  // sequelize
+  config.sequelize = {
+    dialect: 'mysql',
+    host: '127.0.0.1',
+    port: 3306,
+    database: 'monitor',
+    define: {
+      freezeTableName: true,
+      timestamps: true,
+      underscored: true,
+    },
   };
+  // security
+  config.security = {
+    csrf: {
+      enable: false,
+    },
+  };
+
+  return config;
 };
