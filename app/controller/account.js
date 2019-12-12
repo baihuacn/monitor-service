@@ -1,13 +1,27 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const uuid = require('uuid/v1');
+const moment = require('moment');
 
 class AccountController extends Controller {
-  // 获取token
-  async token() {
-    const { ctx } = this;
-    const data = await ctx.model.Account.findAll();
-    ctx.body = { code: 0, message: '成功', data };
+  // 登录
+  async login() {
+    const { ctx, app } = this;
+    const { phone, password } = ctx.request.body;
+    if (!phone || !password) {
+      ctx.body = { code: 1000, message: '手机号或密码不能为空', data: null };
+      return;
+    }
+    const account = await ctx.model.Account.findOne({ phone, password });
+    if (!account) {
+      ctx.body = { code: 1000, message: '手机号或密码错误', data: null };
+      return;
+    }
+    const token = uuid();
+    const loginInfo = { id: account.id, createdAt: moment().format() };
+    await app.redis.set(token, JSON.stringify(loginInfo), 'EX', 60);
+    ctx.body = { code: 0, message: '成功', data: token };
   }
   // 获取详情
   async detail() {

@@ -14,7 +14,7 @@ module.exports = appInfo => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1572846932678_4897';
   // add your middleware config here
-  config.middleware = [];
+  config.middleware = [ 'passport' ];
   // add your user config here
   config.myAppName = 'monitor-service';
   // cluster
@@ -40,6 +40,15 @@ module.exports = appInfo => {
   config.security = {
     csrf: {
       enable: false,
+    },
+  };
+  // redis
+  config.redis = {
+    client: {
+      port: 6379,
+      host: '127.0.0.1',
+      password: null,
+      db: 0,
     },
   };
 

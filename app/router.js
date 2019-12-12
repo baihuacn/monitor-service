@@ -2,6 +2,7 @@
 
 module.exports = app => {
   const { router, controller } = app;
+  router.post('/account/login', controller.account.login);
   router.post('/account/detail', controller.account.detail);
   router.post('/account/create', controller.account.create);
   router.post('/account/update', controller.account.update);
